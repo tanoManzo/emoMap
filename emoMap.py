@@ -24,7 +24,7 @@ def collect_emotions(list_emotions):
     dict_emo = defaultdict(list)    
     for l_emo in list_emotions:
       for item in l_emo:
-        if (item['score'] > 0.2) and (item['label']!='neutral'):
+        if (item['score'] > 0.1) and (item['label']!='neutral'):
           dict_emo[item['label']].append(item['score'])
     return dict_emo
 
@@ -37,7 +37,9 @@ st.header("Retrieve Emotions from Transcripts")
 ## START PIPELINE Translation and Emotion
 
 # translation
-pipe_translation = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+pipe_translation_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+pipe_translation_fr = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+
 
 # emotion
 model_ckpt = "JuliusAlphonso/distilbert-plutchik"
@@ -46,7 +48,20 @@ pipe_emotion = pipeline("text-classification",model=model_ckpt, top_k=None, max_
 ## File loader
 uploaded_file = st.file_uploader("Upload a transcript")
 
-if uploaded_file:
+
+option = st.selectbox(
+   "Select Transcript Language?",
+   ("French", "Spanish"),
+   index=0,
+   placeholder="Select language...",
+)
+
+if option=='French':
+    pipe_translation = pipe_translation_fr
+else:
+    pipe_translation = pipe_translation_es
+    
+if uploaded_file and option!=0:
     st.write('File Uploaded')
 
     transcription = getText(uploaded_file).split('\n')
