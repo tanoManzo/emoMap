@@ -41,13 +41,15 @@ if 'key' not in st.session_state:
   st.session_state['key'] = 'value'
   
   # translation
-  pipe_translation_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-  pipe_translation_fr = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-  
+  st.session_state['tran_es'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+  st.session_state['tran_fr'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
   
   # emotion
   model_ckpt = "JuliusAlphonso/distilbert-plutchik"
-  pipe_emotion = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
+  st.session_state['pipe_emo'] = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
+ 
+  
+pipe_emotion = st.session_state['pipe_emo']
 
 ## File loader
 uploaded_file = st.file_uploader("Upload a transcript")
@@ -61,9 +63,9 @@ option = st.selectbox(
 )
 
 if option=='French':
-    pipe_translation = pipe_translation_fr
+    pipe_translation = st.session_state['tran_fr']
 else:
-    pipe_translation = pipe_translation_es
+    pipe_translation = st.session_state['tran_es']
     
 if uploaded_file and option!=0:
     st.write('File Uploaded')
