@@ -62,83 +62,78 @@ pipe_emotion = st.session_state['pipe_emo']
 ## File loader
 uploaded_file = st.file_uploader("Upload a transcript")
 
-
-
-
-
-#    pipe_translation = st.session_state['tran_es']
     
-if uploaded_file:
-    st.write('File Uploaded')
-
-    transcription = getText(uploaded_file).split('\n')
-
-    ## Sentences from transcript
-    list_parag_transcription = []
-
-    for parag in transcription:
-      sentences = sent_tokenize(parag)
-      list_parag_transcription.extend(sentences)  
-    
-    flag_stop = 0
-    language = ''
-    if detect(list_parag_transcription[0])=='fr':
-        language = 'FRENCH'
-        pipe_translation = st.session_state['tran_fr']
-        st.write(f'Language detected: {language}')
-    elif detect(list_parag_transcription[0])=='es':
-        language = 'SPANISH'
-        pipe_translation = st.session_state['tran_es']
-        st.write(f'Language detected: {language}')
-    else:
-        language = detect(list_parag_transcription[0])
-        st.write(f'Language detected: {language} --> NOT SUPPORTED.')
-        flag_stop = 1
-        
-    ## get translations and emotions
-    flag_process = True
-    translations = []
-    emotions = []
-    with st.spinner('Please wait'):
-        progress_text = "Emotion detection in progress .."
-        my_bar = st.progress(0, text=progress_text)
-        for idx, item in enumerate(list_parag_transcription):
-            translated = pipe_translation(item)[0]['translation_text']
-            translations.append(translated)
-            emotions.append(pipe_emotion(translated)[0])
-            my_bar.progress(int(100*(idx/len(list_parag_transcription))) + 1, text=progress_text)
-
-    
-    ## Preocess results 
-    dict_emo = collect_emotions(emotions)
-    keys = dict_emo.keys()
-
-    list_val = []
-    list_val_max = []
-    list_keys = []
-    for k in keys:
-      emo_dict = dict_emo
-      if k in emo_dict:
-        list_val.append(np.mean(dict_emo[k]))
-        list_val_max.append(np.max(dict_emo[k]))
-        list_keys.append(k)
-    
-    categories = list_keys
-
-    fig = go.Figure()
-
-    # change color based on the emotion
-    green_list = ['joy','trust']
-    red_list = ['fear', 'anger', 'sadness', 'disgust']
-    
-    if categories[np.argmax(list_val)] in green_list:
-        color_fill = 'rgba(0,250,0,0.5)'
-    elif categories[np.argmax(list_val)] in red_list:
-        color_fill = 'rgba(250,0,0,0.5)'
-    else:    
-        color_fill = 'rgba(0,0,250,0.5)'
-        
-
+#if uploaded_file:
+#    st.write('File Uploaded')
+#
+#    transcription = getText(uploaded_file).split('\n')
+#
+#    ## Sentences from transcript
+#    list_parag_transcription = []
+#
+#    for parag in transcription:
+#      sentences = sent_tokenize(parag)
+#      list_parag_transcription.extend(sentences)  
+#    
+#    flag_stop = 0
+#    language = ''
+#    if detect(list_parag_transcription[0])=='fr':
+#        language = 'FRENCH'
+#        pipe_translation = st.session_state['tran_fr']
+#        st.write(f'Language detected: {language}')
+#    elif detect(list_parag_transcription[0])=='es':
+#        language = 'SPANISH'
+#        pipe_translation = st.session_state['tran_es']
+#        st.write(f'Language detected: {language}')
+#    else:
+#        language = detect(list_parag_transcription[0])
+#        st.write(f'Language detected: {language} --> NOT SUPPORTED.')
+#        flag_stop = 1
+#        
+#    ## get translations and emotions
+#    flag_process = True
+#    translations = []
+#    emotions = []
+#    with st.spinner('Please wait'):
+#        progress_text = "Emotion detection in progress .."
+#        my_bar = st.progress(0, text=progress_text)
+#        for idx, item in enumerate(list_parag_transcription):
+#            translated = pipe_translation(item)[0]['translation_text']
+#            translations.append(translated)
+#            emotions.append(pipe_emotion(translated)[0])
+#            my_bar.progress(int(100*(idx/len(list_parag_transcription))) + 1, text=progress_text)
+#
+#    
+#    ## Preocess results 
+#    dict_emo = collect_emotions(emotions)
+#    keys = dict_emo.keys()
+#
+#    list_val = []
+#    list_val_max = []
+#    list_keys = []
+#    for k in keys:
+#      emo_dict = dict_emo
+#      if k in emo_dict:
+#        list_val.append(np.mean(dict_emo[k]))
+#        list_val_max.append(np.max(dict_emo[k]))
+#        list_keys.append(k)
+#    
+#    categories = list_keys
+#
+#    fig = go.Figure()
+#
+#    # change color based on the emotion
+#    green_list = ['joy','trust']
+#    red_list = ['fear', 'anger', 'sadness', 'disgust']
+#    
+#    if categories[np.argmax(list_val)] in green_list:
+#        color_fill = 'rgba(0,250,0,0.5)'
+#    elif categories[np.argmax(list_val)] in red_list:
+#        color_fill = 'rgba(250,0,0,0.5)'
+#    else:    
+#        color_fill = 'rgba(0,0,250,0.5)'
+#        
+#
     
     fig.add_trace(go.Scatterpolar(
       r=list_val_max,
