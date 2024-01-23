@@ -85,7 +85,6 @@ if uploaded_file:
     
     ### Emotion Model 
     if 'pipe_emo' not in st.session_state:
-      # emotion
       model_ckpt = "JuliusAlphonso/distilbert-plutchik"
       st.session_state['pipe_emo'] = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
       
