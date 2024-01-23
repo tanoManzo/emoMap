@@ -25,14 +25,17 @@ DetectorFactory.seed = 0
 
 
 
-### Functions 
+# Functions 
+
+## get text from a docx file
 def getText(filename):
     doc = Document(filename)
     fullText = []
     for para in doc.paragraphs:
         fullText.append(para.text)
     return '\n'.join(fullText)
-
+  
+## collect emotions, filter CI > 0.1, no neutral
 def collect_emotions(list_emotions):
     dict_emo = defaultdict(list)    
     for l_emo in list_emotions:
@@ -42,34 +45,28 @@ def collect_emotions(list_emotions):
     return dict_emo
 
 
-
-## General
+# General
 st.title("EmoMap")
 st.header("Retrieve Emotions from Transcripts")
 
 ## START PIPELINE Translation and Emotion
 
-
-
-## File loader
+### File loader
 uploaded_file = st.file_uploader("Upload a transcript")
-
-    
+  
 if uploaded_file:
     st.write('File Uploaded')  
     
     transcription = getText(uploaded_file).split('\n')
 
-    ## Sentences from transcript
+    ### Sentences from transcript
     list_parag_transcription = []
 
     for parag in transcription:
       sentences = sent_tokenize(parag)
       list_parag_transcription.extend(sentences)  
     
-    ## Initialization
-
-    # Language Detection
+    ### Language Detection, Translation Model(s)
     flag_stop = 0
     language = ''
     if detect(list_parag_transcription[0])=='fr':
@@ -89,6 +86,7 @@ if uploaded_file:
         st.write(f'Language detected: {language} --> NOT SUPPORTED.')
         flag_stop = 1
     
+    ### Emotion Model 
     if 'pipe_emo' not in st.session_state:
       # emotion
       model_ckpt = "JuliusAlphonso/distilbert-plutchik"
@@ -96,7 +94,7 @@ if uploaded_file:
       
     pipe_emotion = st.session_state['pipe_emo']
         
-    ## get translations and emotions
+    ### Get translations and emotions
     translations = []
     emotions = []
     with st.spinner('Please wait'):
@@ -127,7 +125,7 @@ if uploaded_file:
 
     fig = go.Figure()
 
-    # change color based on the emotion
+    ### change color based on the emotion
     green_list = ['joy','trust']
     red_list = ['fear', 'anger', 'sadness', 'disgust']
     
@@ -138,7 +136,7 @@ if uploaded_file:
     else:    
         color_fill = 'rgba(0,0,250,0.5)'
         
-    # Plots
+    ## Plots
     fig.add_trace(go.Scatterpolar(
       r=list_val_max,
       theta=categories,
