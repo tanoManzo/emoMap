@@ -69,7 +69,7 @@ if uploaded_file:
     
     ## Initialization
 
-    
+    # Language Detection
     flag_stop = 0
     language = ''
     if detect(list_parag_transcription[0])=='fr':
@@ -109,7 +109,7 @@ if uploaded_file:
             my_bar.progress(int(100*(idx/len(list_parag_transcription))) + 1, text=progress_text)
 
     
-    ## Preocess results 
+    ## Process results 
     dict_emo = collect_emotions(emotions)
     keys = dict_emo.keys()
 
@@ -138,8 +138,7 @@ if uploaded_file:
     else:    
         color_fill = 'rgba(0,0,250,0.5)'
         
-#
-    
+    # Plots
     fig.add_trace(go.Scatterpolar(
       r=list_val_max,
       theta=categories,
