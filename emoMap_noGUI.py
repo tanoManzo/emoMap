@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 from collections import defaultdict
 import numpy as np
 
+
+
 ### Functions 
 def getText(filename):
     doc = Document(filename)
@@ -68,7 +70,7 @@ pipe_translation = pipe_translation_fr
 transcription = getText(uploaded_file).split('\n')
 
 ## Sentences from transcript
-list_parag_transcriptio = [
+list_parag_transcriptio = []
 for parag in transcription:
   sentences = sent_tokenize(parag)
   list_parag_transcriptio.extend(sentences)  

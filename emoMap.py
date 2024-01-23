@@ -11,6 +11,11 @@ from transformers import pipeline
 import plotly.graph_objects as go
 from collections import defaultdict
 import numpy as np
+from langdetect import detect, DetectorFactory
+DetectorFactory.seed = 0
+
+
+
 
 ### Functions 
 def getText(filename):
@@ -55,30 +60,38 @@ pipe_emotion = st.session_state['pipe_emo']
 uploaded_file = st.file_uploader("Upload a transcript")
 
 
-option = st.selectbox(
-   "Select Transcript Language?",
-   ("French", "Spanish"),
-   index=0,
-   placeholder="Select language...",
-)
 
-if option=='French':
-    pipe_translation = st.session_state['tran_fr']
-else:
-    pipe_translation = st.session_state['tran_es']
+
+
+#    pipe_translation = st.session_state['tran_es']
     
-if uploaded_file and option!=0:
+if uploaded_file:
     st.write('File Uploaded')
 
     transcription = getText(uploaded_file).split('\n')
 
     ## Sentences from transcript
-    list_parag_transcriptio = []
+    list_parag_transcription = []
 
     for parag in transcription:
       sentences = sent_tokenize(parag)
-      list_parag_transcriptio.extend(sentences)  
-
+      list_parag_transcription.extend(sentences)  
+    
+    flag_stop = 0
+    language = ''
+    if detect(list_parag_transcription[0])=='fr':
+        language = 'FRENCH'
+        pipe_translation = st.session_state['tran_fr']
+        st.write(f'Language detected: {language}')
+    elif detect(list_parag_transcription[0])=='es':
+        language = 'SPANISH'
+        pipe_translation = st.session_state['tran_es']
+        st.write(f'Language detected: {language}')
+    else:
+        language = detect(list_parag_transcription[0])
+        st.write(f'Language detected: {language} --> NOT SUPPORTED.')
+        flag_stop = 1
+        
     ## get translations and emotions
     flag_process = True
     translations = []
@@ -86,13 +99,12 @@ if uploaded_file and option!=0:
     with st.spinner('Please wait'):
         progress_text = "Emotion detection in progress .."
         my_bar = st.progress(0, text=progress_text)
-        for idx, item in enumerate(list_parag_transcriptio):
+        for idx, item in enumerate(list_parag_transcription):
             translated = pipe_translation(item)[0]['translation_text']
             translations.append(translated)
             emotions.append(pipe_emotion(translated)[0])
-            my_bar.progress(int(100*(idx/len(list_parag_transcriptio))) + 1, text=progress_text)
+            my_bar.progress(int(100*(idx/len(list_parag_transcription))) + 1, text=progress_text)
 
-        print(len(list_parag_transcriptio))
     
     ## Preocess results 
     dict_emo = collect_emotions(emotions)
