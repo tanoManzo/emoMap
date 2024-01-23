@@ -8,6 +8,11 @@ import torch
 
 
 from nltk.tokenize import sent_tokenize
+
+if 'key' not in st.session_state:
+  nltk.download('punkt')
+
+
 import sentencepiece
 
 from transformers import pipeline
