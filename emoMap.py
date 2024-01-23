@@ -65,21 +65,19 @@ if uploaded_file:
     
     ### Language Detection, Translation Model(s)
     flag_stop = 0
-    language = ''
-    if detect(list_parag_transcription[0])=='fr':
-        language = 'FRENCH'
+    language = detect(list_parag_transcription[0])
+    if language == 'fr':
         if 'tran_fr' not in st.session_state:
-          st.session_state['tran_fr'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+          st.session_state['tran_fr'] = pipeline("translation", model="Helsinki-NLP/opus-mt-fr-en", max_length=512, truncation=True)
         pipe_translation = st.session_state['tran_fr']
-        st.write(f'Language detected: {language}')
-    elif detect(list_parag_transcription[0])=='es':
+        st.write('Language detected: FRENCH')
+    elif language == 'es':
         language = 'SPANISH'
         if 'tran_es' not in st.session_state:
           st.session_state['tran_es'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
         pipe_translation = st.session_state['tran_es']
-        st.write(f'Language detected: {language}')
+        st.write('Language detected: SPANISH')
     else:
-        language = detect(list_parag_transcription[0])
         st.write(f'Language detected: {language} --> NOT SUPPORTED.')
         flag_stop = 1
     
