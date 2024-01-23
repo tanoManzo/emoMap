@@ -1,24 +1,21 @@
+# Libraries
 import streamlit as st
-
-
 from io import StringIO
 from docx import Document
 import nltk
 import torch
 
-
 from nltk.tokenize import sent_tokenize
-
 if 'key' not in st.session_state:
   nltk.download('punkt')
 
-
 import sentencepiece
-
 from transformers import pipeline
 import plotly.graph_objects as go
+
 from collections import defaultdict
 import numpy as np
+
 from langdetect import detect, DetectorFactory
 DetectorFactory.seed = 0
 
