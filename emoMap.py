@@ -133,33 +133,33 @@ uploaded_file = st.file_uploader("Upload a transcript")
 #    else:    
 #        color_fill = 'rgba(0,0,250,0.5)'
 #        
+##
+#    
+#    fig.add_trace(go.Scatterpolar(
+#      r=list_val_max,
+#      theta=categories,
+#      fill='toself',
+#      line_color='rgba(0,0,200,0.7)',
+#      fillcolor='rgba(0,0,200,0.3)',
+#      name='Max Emotions'
+#    ))
 #
-    
-    fig.add_trace(go.Scatterpolar(
-      r=list_val_max,
-      theta=categories,
-      fill='toself',
-      line_color='rgba(0,0,200,0.7)',
-      fillcolor='rgba(0,0,200,0.3)',
-      name='Max Emotions'
-    ))
-
-    fig.add_trace(go.Scatterpolar(
-        r=list_val,
-        theta=categories,
-        fill='toself',
-        line_color='rgba(0,200,0,0.7)',
-        fillcolor='rgba(0,200,0,0.3)',
-        name='Mean Emotions'
-    ))
-
-    fig.update_layout(
-      polar=dict(
-        radialaxis=dict(
-          visible=True,
-          range=[0, 1]
-        )),
-      showlegend=True
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
+#    fig.add_trace(go.Scatterpolar(
+#        r=list_val,
+#        theta=categories,
+#        fill='toself',
+#        line_color='rgba(0,200,0,0.7)',
+#        fillcolor='rgba(0,200,0,0.3)',
+#        name='Mean Emotions'
+#    ))
+#
+#    fig.update_layout(
+#      polar=dict(
+#        radialaxis=dict(
+#          visible=True,
+#          range=[0, 1]
+#        )),
+#      showlegend=True
+#    )
+#
+#    st.plotly_chart(fig, use_container_width=True)
