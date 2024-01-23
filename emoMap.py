@@ -36,14 +36,18 @@ st.header("Retrieve Emotions from Transcripts")
 
 ## START PIPELINE Translation and Emotion
 
-# translation
-pipe_translation_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-pipe_translation_fr = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-
-
-# emotion
-model_ckpt = "JuliusAlphonso/distilbert-plutchik"
-pipe_emotion = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
+# Initialization
+if 'key' not in st.session_state:
+  st.session_state['key'] = 'value'
+  
+  # translation
+  pipe_translation_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+  pipe_translation_fr = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+  
+  
+  # emotion
+  model_ckpt = "JuliusAlphonso/distilbert-plutchik"
+  pipe_emotion = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
 
 ## File loader
 uploaded_file = st.file_uploader("Upload a transcript")
