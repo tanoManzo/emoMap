@@ -6,9 +6,6 @@ from docx import Document
 import nltk
 import torch
 
-if 'key_l' not in st.session_state:
-    st.session_state['key_l'] = 'value'
-    nltk.download('punkt')
 
 from nltk.tokenize import sent_tokenize
 import sentencepiece
