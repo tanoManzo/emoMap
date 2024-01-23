@@ -44,20 +44,20 @@ st.header("Retrieve Emotions from Transcripts")
 
 ## START PIPELINE Translation and Emotion
 
-# Initialization
-if 'key' not in st.session_state:
-  st.session_state['key'] = 'value'
-  
-  # translation
-  st.session_state['tran_es'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-  st.session_state['tran_fr'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
-  
-  # emotion
-  model_ckpt = "JuliusAlphonso/distilbert-plutchik"
-  st.session_state['pipe_emo'] = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
- 
-  
-pipe_emotion = st.session_state['pipe_emo']
+## Initialization
+#if 'key' not in st.session_state:
+#  st.session_state['key'] = 'value'
+#  
+#  # translation
+#  st.session_state['tran_es'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+#  st.session_state['tran_fr'] = pipeline("translation", model="Helsinki-NLP/opus-mt-es-en", max_length=512, truncation=True)
+#  
+#  # emotion
+#  model_ckpt = "JuliusAlphonso/distilbert-plutchik"
+#  st.session_state['pipe_emo'] = pipeline("text-classification",model=model_ckpt, top_k=None, max_length=512,truncation=True)
+# 
+#  
+#pipe_emotion = st.session_state['pipe_emo']
 
 ## File loader
 uploaded_file = st.file_uploader("Upload a transcript")
